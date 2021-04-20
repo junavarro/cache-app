@@ -14,8 +14,8 @@ export class ContextManagerService {
   private cacheL2$: BehaviorSubject<{ blocks: CacheL2Block[] }> = new BehaviorSubject<{ blocks: CacheL2Block[] }>(InitData.CacheL2);
   public readonly cacheL2: Observable<{ blocks: CacheL2Block[] }> = this.cacheL2$.asObservable();
 
-  private mainMemory$: BehaviorSubject<{ blocks: MainMemoryBlock[] }> = new BehaviorSubject<{ blocks: MainMemoryBlock[] }>(InitData.CacheL2);
-  public readonly mainMemory: Observable<{ blocks: MainMemoryBlock[] }> = this.cacheL2$.asObservable();
+  private mainMemory$: BehaviorSubject<{ blocks: MainMemoryBlock[] }> = new BehaviorSubject<{ blocks: MainMemoryBlock[] }>(InitData.MainMemory);
+  public readonly mainMemory: Observable<{ blocks: MainMemoryBlock[] }> = this.mainMemory$.asObservable();
 
   constructor() { }
 
@@ -54,6 +54,7 @@ export class ContextManagerService {
       const block = mainMemory.blocks.find(block => block.address === mainMemoryParam.address)
       if (block) {
         block.data = mainMemoryParam.data
+        this.mainMemory$.next(mainMemory);
         resolve(true);
       }
     });

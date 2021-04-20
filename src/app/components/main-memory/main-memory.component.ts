@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import InitData from 'src/app/data/initData';
+import { MainMemoryBlock } from 'src/app/models/Models';
+import { ContextManagerService } from 'src/app/services/context-manager.service';
 
 @Component({
   selector: 'app-main-memory',
@@ -8,14 +10,18 @@ import InitData from 'src/app/data/initData';
 })
 export class MainMemoryComponent implements OnInit {
 
-  source = InitData.MainMemory.blocks;
+  source : MainMemoryBlock[] = [];
   displayedColumns: string[] = ['blockId', 'address', 'data'];
 
-  constructor() {
-
+  constructor(private contextManager: ContextManagerService) {
   }
 
   ngOnInit(): void {
+    this.contextManager.mainMemory.subscribe(
+      memory => {
+        this.source = memory.blocks
+      }
+    )
   }
 
 }
