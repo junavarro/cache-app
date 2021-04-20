@@ -4,6 +4,11 @@ div.CPUContainer{
     width: 400px;
     display: flex;
 }
+div{
+    &.nodeDescription{
+        padding: 10px;
+    }
+}
 table{
     width: 230px;
 }

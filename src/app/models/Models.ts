@@ -51,6 +51,12 @@ export interface MainMemoryBlock {
 /**
  * CPU 
  */
+export interface InstructionState{
+    PENDING: 'PENDING',
+    EXECUTING: 'EXECUTING',
+    DONE: 'DONE'
+
+}
 export interface Operation {
     CALC: 'CALC';
     READ: 'READ';
@@ -61,6 +67,7 @@ export interface Instruction {
     operation: Operation;
     address: string;
     value: string;
+    state: InstructionState
 }
 
 
