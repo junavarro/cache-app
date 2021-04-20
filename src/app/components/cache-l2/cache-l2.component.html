@@ -1,1 +1,49 @@
-<p>cache-l2 works!</p>
+<table mat-table [dataSource]="source">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+
+    <ng-container matColumnDef="blockId">
+        <th mat-header-cell *matHeaderCellDef> Block </th>
+        <td mat-cell *matCellDef="let element"> {{element.blockId}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef> State </th>
+        <td mat-cell *matCellDef="let element"> {{element.state}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="P0">
+        <th mat-header-cell *matHeaderCellDef> P0 </th>
+        <td mat-cell *matCellDef="let element"> {{element.P0 }} </td>
+    </ng-container>
+    <ng-container matColumnDef="P1">
+        <th mat-header-cell *matHeaderCellDef> P1 </th>
+        <td mat-cell *matCellDef="let element"> {{element.P1}} </td>
+    </ng-container>
+    <ng-container matColumnDef="P2">
+        <th mat-header-cell *matHeaderCellDef> P2 </th>
+        <td mat-cell *matCellDef="let element"> {{element.P2}} </td>
+    </ng-container>
+    <ng-container matColumnDef="P3">
+        <th mat-header-cell *matHeaderCellDef> P3 </th>
+        <td mat-cell *matCellDef="let element"> {{element.P3}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="data">
+        <th mat-header-cell *matHeaderCellDef> Data </th>
+        <td mat-cell *matCellDef="let element"> {{element.data}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
