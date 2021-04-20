@@ -59,4 +59,8 @@ export class ContextManagerService {
       }
     });
   }
+  
+  enableNode (nodeId:string, enable: boolean ){
+
+  }
 }

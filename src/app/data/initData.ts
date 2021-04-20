@@ -8,32 +8,28 @@ export const InitData: CEContext = {
             cacheL1: [
                 { blockId: '0', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
                 { blockId: '1', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
-            ],
-            currentInstruction: null
+            ]
         },
         {
             nodeId: '1',
             cacheL1: [
                 { blockId: '0', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
                 { blockId: '1', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
-            ],
-            currentInstruction: null
+            ]
         },
         {
             nodeId: '2',
             cacheL1: [
                 { blockId: '0', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
                 { blockId: '1', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
-            ],
-            currentInstruction: null
+            ]
         },
         {
             nodeId: '3',
             cacheL1: [
                 { blockId: '0', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
                 { blockId: '1', address: '0x0', data: '0x0', state: CacheL1BlockState.INVALID },
-            ],
-            currentInstruction: null
+            ]
         }
     ],
     CacheL2: {

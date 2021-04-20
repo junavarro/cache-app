@@ -25,7 +25,7 @@ export class InstructionGenerator {
      * }
      */
     generateInstruction(processorId: string) {
-        // this.seed = Date.now()*(processorId+1);
+        this.seed = Date.now()*(Number(processorId)+1);
         const pseudo_uniform_aux = (mult: number, mod: number, seed: number, size: number) => {
             const U = Array(size).fill(0);
             let x = (seed * mult + 1) % mod;

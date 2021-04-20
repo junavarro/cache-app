@@ -78,7 +78,6 @@ export interface Instruction {
  */
 export interface ClusterNode {
     nodeId: string; // 0,1,2,3
-    currentInstruction: Instruction | null;
     cacheL1: CacheL1Block[]
 }
 

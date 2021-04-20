@@ -36,9 +36,29 @@
     </div>
     <div class="nodeDescription">
         CPU {{nodeId}}
-        <p>
-            Instruction: {{ clusterNode.currentInstruction | json}}
-        </p>
+        <div class="description">
 
+            <ng-container *ngIf="currentInstruction?.operation === 'CALC'">
+                <p>
+                    {{ currentInstruction?.operation}}
+                </p>
+            </ng-container>
+            <ng-container *ngIf="currentInstruction?.operation === 'READ'">
+                <p>
+                    {{ currentInstruction?.operation }} [{{ currentInstruction?.address }} ]
+                </p>
+            </ng-container>
+            <ng-container *ngIf="currentInstruction?.operation === 'WRITE'">
+                <p>
+                    {{ currentInstruction?.operation }} [{{ currentInstruction?.address }} ]: {{
+                    currentInstruction?.value
+                    }}
+                </p>
+            </ng-container>
+        </div>
+        <div class="tools">
+            <button mat-raised-button color="basic" >Custom</button>
+            <button mat-raised-button color="accent" (click)="dispatchNextInstruction()">Next</button>
+        </div>
     </div>
 </div>

@@ -1,14 +1,26 @@
-div.CPUContainer{
-    border: solid 2px #000;
-    margin: 10px;
-    width: 400px;
+div.CPUContainer {
+  border: solid 2px #000;
+  margin: 10px;
+  width: 400px;
+  display: flex;
+}
+div {
+  &.nodeDescription {
+    padding: 0px 10px;
     display: flex;
-}
-div{
-    &.nodeDescription{
-        padding: 10px;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-around;
+    div {
+      &.tools {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
+  }
 }
-table{
-    width: 230px;
+table {
+  width: 230px;
 }
