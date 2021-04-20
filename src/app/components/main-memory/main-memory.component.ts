@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import InitData from 'src/app/data/initData';
 
 @Component({
   selector: 'app-main-memory',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainMemoryComponent implements OnInit {
 
-  constructor() { }
+  source = InitData.MainMemory.blocks;
+  displayedColumns: string[] = ['blockId', 'address', 'data'];
+
+  constructor() {
+
+  }
 
   ngOnInit(): void {
   }

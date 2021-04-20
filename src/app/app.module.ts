@@ -22,7 +22,7 @@ import { CacheL2Component } from './components/cache-l2/cache-l2.component';
     BrowserAnimationsModule,
     MatTableModule
   ],
-  exports: [NodeComponent, MainMemoryComponent, CacheL2Component],
+  exports: [NodeComponent, MainMemoryComponent, CacheL2Component,MainMemoryComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
