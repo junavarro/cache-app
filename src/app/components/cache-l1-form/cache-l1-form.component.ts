@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ContextManagerService } from 'src/app/services/context-manager.service';
 import { CacheL1BlockState } from './../../models/Models';
 
 @Component({
@@ -8,11 +9,11 @@ import { CacheL1BlockState } from './../../models/Models';
   styleUrls: ['./cache-l1-form.component.scss']
 })
 export class CacheL1FormComponent implements OnInit {
-  processorSelected: string | null = null;
-  blockSelected: string | null = null;
+  processorSelected: string = '';
+  blockSelected: string = '';
   stateSelected: CacheL1BlockState | null = null;
-  addressSelected: string | null = null;
-  dataInput: string | null = null;
+  addressSelected: string = '';
+  dataInput: string = '';
   processorList: { id: string, value: string }[] = [{ id: '0', value: 'P0' }, { id: '1', value: 'P1' }, { id: '2', value: 'P2' }, { id: '3', value: 'P3' }];
   blockList: { id: string, value: string }[] = [{ id: '0', value: 'Block 0' }, { id: '1', value: 'Block 1' }];
   stateList: { id: CacheL1BlockState, value: string }[] = [
@@ -52,9 +53,20 @@ export class CacheL1FormComponent implements OnInit {
       id: '7',
       value: '0x7'
     }];
-  constructor() { }
+  constructor(private contextManager: ContextManagerService) { }
 
   ngOnInit(): void {
+  }
+
+  setBlock() {
+    const block = {
+      address: this.addressSelected,
+      blockId: this.blockSelected,
+      data: this.dataInput,
+      processorId: this.processorSelected,
+      state: this.stateSelected
+    };
+    this.contextManager.setCacheL1Block(block);
   }
 
 }

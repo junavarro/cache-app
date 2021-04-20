@@ -42,12 +42,12 @@ export interface MainMemoryBlock {
 /**
  * CPU 
  */
-export interface  Operation {
-    CALC : 'CALC';
+export interface Operation {
+    CALC: 'CALC';
     READ: 'READ';
     WRITE: 'WRITE';
 }
-export interface Instruction{
+export interface Instruction {
     nodeId: string; // 0,1,2,3
     operation: Operation;
     address: string;
@@ -68,12 +68,36 @@ export interface ClusterNode {
 /**
  * Context
  */
-export interface CEContext{
+export interface CEContext {
     NODES: ClusterNode[],
-    CacheL2:{
+    CacheL2: {
         blocks: CacheL2Block[]
     },
     MainMemory: {
         blocks: MainMemoryBlock[]
-    } 
+    }
+}
+
+
+/**
+ * Forms
+ */
+export interface CacheL1Params {
+    processorId: string,
+    blockId: string,
+    state: CacheL1BlockState | null,
+    address: string,
+    data: string
+}
+export interface CacheL2Params {
+    blockId: string,
+    state: CacheL2BlockState | null,
+    list: boolean[],
+    address: string,
+    data: string
+}
+
+export interface MainMemoryParam {
+    address: string,
+    data: string
 }
