@@ -1,37 +1,40 @@
-<h1> Cache L1 Manual Config</h1>
-<form class="cachel1-form">
-    <mat-form-field class="processor-selector">
-        <mat-label>Processor</mat-label>
-        <mat-select [(value)]="processorSelected">
-            <mat-option *ngFor="let processor of processorList" [value]="processor.id">{{processor.value}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="block-selector">
-        <mat-label>Block</mat-label>
-        <mat-select [(value)]="blockSelected">
-            <mat-option *ngFor="let block of blockList" [value]="block.id">{{block.value}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="state-selector">
-        <mat-label>State</mat-label>
-        <mat-select [(value)]="stateSelected">
-            <mat-option *ngFor="let state of stateList" [value]="state.id">{{state.value}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="address-selector">
-        <mat-label>Address</mat-label>
-        <mat-select [(value)]="addressSelected">
-            <mat-option *ngFor="let address of addressList" [value]="address.id">{{address.value}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field class="data-input">
-        <mat-label>Data</mat-label>
-        <input name="value" matInput type="text" [(ngModel)]="dataInput">
-        <button mat-button *ngIf="dataInput" matSuffix mat-icon-button aria-label="Clear" (click)="dataInput=''">
-            <mat-icon>close</mat-icon>
+<mat-card>
+    <h1> Cache L1 Manual Config</h1>
+    <form class="cachel1-form">
+        <mat-form-field class="processor-selector">
+            <mat-label>Processor</mat-label>
+            <mat-select [(value)]="processorSelected">
+                <mat-option *ngFor="let processor of processorList" [value]="processor.id">{{processor.value}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="block-selector">
+            <mat-label>Block</mat-label>
+            <mat-select [(value)]="blockSelected">
+                <mat-option *ngFor="let block of blockList" [value]="block.id">{{block.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="state-selector">
+            <mat-label>State</mat-label>
+            <mat-select [(value)]="stateSelected">
+                <mat-option *ngFor="let state of stateList" [value]="state.id">{{state.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="address-selector">
+            <mat-label>Address</mat-label>
+            <mat-select [(value)]="addressSelected">
+                <mat-option *ngFor="let address of addressList" [value]="address.id">{{address.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="data-input">
+            <mat-label>Data</mat-label>
+            <input name="value" matInput type="text" [(ngModel)]="dataInput">
+            <button mat-button *ngIf="dataInput" matSuffix mat-icon-button aria-label="Clear" (click)="dataInput=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-button>
+            Update CacheL1 Line
         </button>
-    </mat-form-field>
-    <button mat-button>
-       Update CacheL1 Line 
-    </button>
-</form>
+    </form>
+</mat-card>

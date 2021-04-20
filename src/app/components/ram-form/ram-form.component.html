@@ -1,1 +1,21 @@
-<p>ram-form works!</p>
+<mat-card>
+    <h1> Main memory Manual Config</h1>
+    <form class="cachel1-form">
+        <mat-form-field class="address-selector">
+            <mat-label>Address</mat-label>
+            <mat-select [(value)]="addressSelected">
+                <mat-option *ngFor="let address of addressList" [value]="address.id">{{address.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="data-input">
+            <mat-label>Data</mat-label>
+            <input name="value" matInput type="text" [(ngModel)]="dataInput">
+            <button mat-button *ngIf="dataInput" matSuffix mat-icon-button aria-label="Clear" (click)="dataInput=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-button>
+            Update Main memory Line
+        </button>
+    </form>
+</mat-card>

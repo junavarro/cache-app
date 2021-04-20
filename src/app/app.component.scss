@@ -1,14 +1,28 @@
-
-div{
-    &.clusterContainer{
-        background: grey;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+div {
+  &.clusterContainer {
+    background: grey;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  &.memories {
+    background: darkgray;
+    display: flex;
+    flex-direction: row;
+  }
+  &.forms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    app-cache-l1-form {
+      width: 100%;
     }
-    &.memories{
-        background: darkgray;
-        display: flex;
-        flex-direction: row;
+    app-cache-l2-form {
+      width: 100%;
     }
+    app-ram-form {
+      width: 100%;
+    }
+  }
 }

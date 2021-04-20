@@ -17,7 +17,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,8 +41,9 @@ import { MatInputModule} from '@angular/material/input';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatInputModule
-
+    MatInputModule,
+    MatCheckboxModule,
+    MatCardModule
   ],
   exports: [
     NodeComponent,

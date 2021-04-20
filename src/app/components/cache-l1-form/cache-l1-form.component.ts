@@ -10,7 +10,7 @@ import { CacheL1BlockState } from './../../models/Models';
 export class CacheL1FormComponent implements OnInit {
   processorSelected: string | null = null;
   blockSelected: string | null = null;
-  stateSelected: string | null = null;
+  stateSelected: CacheL1BlockState | null = null;
   addressSelected: string | null = null;
   dataInput: string | null = null;
   processorList: { id: string, value: string }[] = [{ id: '0', value: 'P0' }, { id: '1', value: 'P1' }, { id: '2', value: 'P2' }, { id: '3', value: 'P3' }];

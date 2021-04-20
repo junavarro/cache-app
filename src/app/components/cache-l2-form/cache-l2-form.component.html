@@ -1,1 +1,48 @@
-<p>cache-l2-form works!</p>
+<mat-card>
+    <h1> Cache L2 Manual Config</h1>
+    <form class="cachel1-form">
+        <mat-form-field class="block-selector">
+            <mat-label>Block</mat-label>
+            <mat-select [(value)]="blockSelected">
+                <mat-option *ngFor="let block of blockList" [value]="block.id">{{block.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="state-selector">
+            <mat-label>State</mat-label>
+            <mat-select [(value)]="stateSelected">
+                <mat-option *ngFor="let state of stateList" [value]="state.id">{{state.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <section class="processor-selector" name="P0">
+            <mat-checkbox class="example-margin" [(ngModel)]="presenceList[0]" name="P0">P0</mat-checkbox>
+        </section>
+        <section class="processor-selector" name="P1">
+            <mat-checkbox class="example-margin" [(ngModel)]="presenceList[1]" name="P1">P1</mat-checkbox>
+        </section>
+        <section class="processor-selector" name="P2">
+            <mat-checkbox class="example-margin" [(ngModel)]="presenceList[2]" name="P2">P2</mat-checkbox>
+        </section>
+        <section class="processor-selector" name="P3">
+            <mat-checkbox class="example-margin" [(ngModel)]="presenceList[3]" name="P3">P3</mat-checkbox>
+        </section>
+
+
+        <mat-form-field class="address-selector">
+            <mat-label>Address</mat-label>
+            <mat-select [(value)]="addressSelected">
+                <mat-option *ngFor="let address of addressList" [value]="address.id">{{address.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="data-input">
+            <mat-label>Data</mat-label>
+            <input name="value" matInput type="text" [(ngModel)]="dataInput">
+            <button mat-button *ngIf="dataInput" matSuffix mat-icon-button aria-label="Clear" (click)="dataInput=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-button>
+            Update CacheL2 Line
+        </button>
+    </form>
+
+</mat-card>
