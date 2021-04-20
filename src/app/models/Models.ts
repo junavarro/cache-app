@@ -35,7 +35,7 @@ export interface CacheL2 {
         P2: boolean,
         P3: boolean
     }[]
-} 
+}
 
 /**
  * Main memory
@@ -51,16 +51,18 @@ export interface MainMemoryBlock {
 /**
  * CPU 
  */
-export interface InstructionState{
-    PENDING: 'PENDING',
-    EXECUTING: 'EXECUTING',
-    DONE: 'DONE'
+export enum InstructionState {
+    PENDING = 'PENDING',
+    EXECUTING = 'EXECUTING',
+    DONE = 'DONE',
+    NULL = 'NULL'
 
 }
-export interface Operation {
-    CALC: 'CALC';
-    READ: 'READ';
-    WRITE: 'WRITE';
+export enum Operation {
+    CALC = 'CALC',
+    READ = 'READ',
+    WRITE = 'WRITE',
+    NOP = 'NOP' // value treated as null
 }
 export interface Instruction {
     nodeId: string; // 0,1,2,3
