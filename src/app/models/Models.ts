@@ -28,6 +28,15 @@ export interface CacheL2Block {
     data: string // 0x00
 }
 
+export interface CacheL2 {
+    blocks: CacheL2Block & {
+        P0: boolean,
+        P1: boolean,
+        P2: boolean,
+        P3: boolean
+    }[]
+} 
+
 /**
  * Main memory
  */

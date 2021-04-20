@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CacheL2BlockState } from 'src/app/models/Models';
+import { CacheL2Block, CacheL2BlockState, CacheL2Params } from 'src/app/models/Models';
+import { ContextManagerService } from 'src/app/services/context-manager.service';
 
 @Component({
   selector: 'app-cache-l2-form',
@@ -7,10 +8,10 @@ import { CacheL2BlockState } from 'src/app/models/Models';
   styleUrls: ['./cache-l2-form.component.scss']
 })
 export class CacheL2FormComponent implements OnInit {
-  blockSelected: string | null = null;
-  stateSelected: string | null = null;
-  addressSelected: string | null = null;
-  dataInput: string | null = null;
+  blockSelected: string = '';
+  stateSelected: CacheL2BlockState | null = null;
+  addressSelected: string = '';
+  dataInput: string = '';
   presenceList: boolean[] = [false, false, false, false];
   blockList: { id: string, value: string }[] = [
     { id: '0', value: 'Block 0' },
@@ -54,9 +55,21 @@ export class CacheL2FormComponent implements OnInit {
       id: '7',
       value: '0x7'
     }];
-  constructor() { }
+  constructor(private contextManager: ContextManagerService) { }
 
   ngOnInit(): void {
   }
+
+  setBlock() {
+    const block: CacheL2Params = {
+      address: this.addressSelected,
+      blockId: this.blockSelected,
+      data: this.dataInput,
+      state: this.stateSelected,
+      list: this.presenceList
+    };
+    this.contextManager.setCacheL2Block(block);
+  }
+
 
 }
