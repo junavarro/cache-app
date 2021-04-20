@@ -6,6 +6,8 @@ import { InstructionGenerator } from 'src/app/utils/instruction-generator';
 import InitData from '../../data/initData';
 import { filter, map } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { InstructionEditorComponent } from '../instruction-editor/instruction-editor.component';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -32,7 +34,7 @@ export class NodeComponent implements OnInit {
   displayedColumns: string[] = ['blockId', 'state', 'address', 'data'];
   instructorGenerator: InstructionGenerator = new InstructionGenerator(Number(this.nodeId));
   currentInstruction: Instruction | null = null;
-  constructor(private contextManagerService: ContextManagerService) {
+  constructor(private contextManagerService: ContextManagerService, public dialog: MatDialog) {
 
   }
 
@@ -57,7 +59,7 @@ export class NodeComponent implements OnInit {
   listenInteraction() {
     fromEvent(document, 'nextInstruction').subscribe(eventData => {
       const { nodeId } = (eventData as CustomEvent).detail;
-      if(nodeId === this.clusterNode.nodeId){
+      if (nodeId === this.clusterNode.nodeId) {
         //console.log((eventData as CustomEvent).detail);
         this.fetch();
       }
@@ -71,6 +73,19 @@ export class NodeComponent implements OnInit {
 
   processInstruction() {
     console.log('processing', this.currentInstruction);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(InstructionEditorComponent, {
+      width: '350px',
+      data: { nodeId: this.nodeId }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.currentInstruction = result;
+      console.log('The dialog was closed');
+      this.processInstruction();
+    });
   }
 
 

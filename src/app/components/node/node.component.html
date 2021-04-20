@@ -1,5 +1,4 @@
 <div class='CPUContainer'>
-
     <div>
         <table mat-table [dataSource]="clusterNode.cacheL1">
 
@@ -57,7 +56,7 @@
             </ng-container>
         </div>
         <div class="tools">
-            <button mat-raised-button color="basic" >Custom</button>
+            <button mat-raised-button color="basic" (click)="openDialog()">Custom</button>
             <button mat-raised-button color="accent" (click)="dispatchNextInstruction()">Next</button>
         </div>
     </div>

@@ -1,0 +1,27 @@
+<mat-card>
+    <h2> Instructor Editor for node {{nodeId}}</h2>
+    <form class="cachel1-form" >
+        <mat-form-field class="address-selector" color="accent">
+            <mat-label>Operation</mat-label>
+            <mat-select [(value)]="operationSelected">
+                <mat-option *ngFor="let operation of operationList" [value]="operation.id">{{operation.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="address-selector" color="accent">
+            <mat-label>Address</mat-label>
+            <mat-select [(value)]="addressSelected">
+                <mat-option *ngFor="let address of addressList" [value]="address.id">{{address.value}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="data-input" color="accent">
+            <mat-label>Data</mat-label>
+            <input name="value" matInput type="text" [(ngModel)]="dataInput">
+            <button mat-button *ngIf="dataInput" matSuffix mat-icon-button aria-label="Clear" (click)="dataInput=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-button color="accent" (click)="setBlock()">
+           Send this instruction 
+        </button>
+    </form>
+</mat-card>

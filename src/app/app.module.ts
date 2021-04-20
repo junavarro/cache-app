@@ -20,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
+import { InstructionEditorComponent } from './components/instruction-editor/instruction-editor.component';
+import { MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +31,7 @@ import { MatCardModule } from '@angular/material/card';
     CacheL1FormComponent,
     CacheL2FormComponent,
     RamFormComponent,
+    InstructionEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,8 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatInputModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule
   ],
   exports: [
     NodeComponent,
@@ -52,7 +56,8 @@ import { MatCardModule } from '@angular/material/card';
     MainMemoryComponent,
     CacheL1FormComponent,
     CacheL2FormComponent,
-    RamFormComponent],
+    RamFormComponent,
+    InstructionEditorComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
