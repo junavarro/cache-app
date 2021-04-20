@@ -1,10 +1,13 @@
 
 div{
     &.clusterContainer{
+        background: grey;
         display: flex;
         flex-direction: row;
+        justify-content: center;
     }
     &.memories{
+        background: darkgray;
         display: flex;
         flex-direction: row;
     }

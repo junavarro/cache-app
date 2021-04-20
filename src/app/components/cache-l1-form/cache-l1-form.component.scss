@@ -1,0 +1,24 @@
+form.cachel1-form {
+  display: flex;
+  flex-direction: row;
+}
+mat-form-field {
+  margin-left: 5px;
+  margin-right: 5px;
+  &.processor-selector {
+    width: 100px;
+  }
+  &.block-selector {
+    width: 100px;
+  }
+  &.state-selector {
+    width: 100px;
+  }
+  &.address-selector {
+    width: 100px;
+  }
+  &.data-input {
+    width: 100px;
+    
+  }
+}
