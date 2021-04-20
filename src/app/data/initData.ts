@@ -114,3 +114,4 @@ export const InitData: CEContext = {
     }
 
 }
+export default InitData;

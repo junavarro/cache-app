@@ -1,0 +1,11 @@
+
+div{
+    &.clusterContainer{
+        display: flex;
+        flex-direction: row;
+    }
+    &.memories{
+        display: flex;
+        flex-direction: row;
+    }
+}

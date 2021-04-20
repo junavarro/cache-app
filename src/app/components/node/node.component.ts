@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import InitData from '../../data/initData';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -12,8 +13,11 @@ export interface PeriodicElement {
 })
 
 export class NodeComponent implements OnInit {
+  @Input() nodeId: string | null = null; // decorate the property with @Input()
 
 
+  initData = InitData;
+  displayedColumns: string[] = ['blockId', 'state', 'address', 'data'];
   constructor() { }
 
   ngOnInit(): void {
