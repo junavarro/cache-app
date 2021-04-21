@@ -22,6 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { InstructionEditorComponent } from './components/instruction-editor/instruction-editor.component';
 import { MatDialogModule} from '@angular/material/dialog';
+import { QueueViewerComponent } from './components/queue-viewer/queue-viewer.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,6 +33,7 @@ import { MatDialogModule} from '@angular/material/dialog';
     CacheL2FormComponent,
     RamFormComponent,
     InstructionEditorComponent,
+    QueueViewerComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,8 @@ import { MatDialogModule} from '@angular/material/dialog';
     CacheL1FormComponent,
     CacheL2FormComponent,
     RamFormComponent,
-    InstructionEditorComponent],
+    InstructionEditorComponent,
+    QueueViewerComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
