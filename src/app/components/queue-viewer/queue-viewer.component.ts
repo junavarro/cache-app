@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Instruction } from 'src/app/models/Models';
+import { Instruction, InstructionState } from 'src/app/models/Models';
 import { ContextManagerService } from 'src/app/services/context-manager.service';
-
+import { map, filter } from 'rxjs/operators';
 @Component({
   selector: 'app-queue-viewer',
   templateUrl: './queue-viewer.component.html',
@@ -13,7 +13,11 @@ export class QueueViewerComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.contextManager.queue.subscribe(queue => this.list = queue);
+    this.contextManager.queue.pipe(
+      map((queue) => {
+        return queue.filter(item => item.state === InstructionState.PENDING)
+      })
+    ).subscribe(queue => this.list = queue);
   }
 
 }

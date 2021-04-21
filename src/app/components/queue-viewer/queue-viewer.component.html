@@ -1,4 +1,5 @@
 <div class="queueContainer">
+    <h2> Queue Instructions container</h2>
     <mat-chip-list class="queue" aria-label="queue ">
         <mat-chip [color]="item.operation ==='CALC'? 'accent':item.operation ==='READ' ? 'warning' : 'primary'  " class="instruction" *ngFor="let item of list " selected>
             {{item.operation}}

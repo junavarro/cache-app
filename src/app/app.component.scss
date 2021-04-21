@@ -16,6 +16,10 @@ div {
         margin: 5px;
         border: 2px solid cornflowerblue;
         height: 100%;
+        div.terminal{
+          margin: 10px;
+          border: 2px solid cornflowerblue;
+        }
       }
       &.mainMemoryContainer {
         margin: 5px;
