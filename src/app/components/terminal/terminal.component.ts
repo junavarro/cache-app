@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Instruction, InstructionState, Operation } from 'src/app/models/Models';
+import { ContextManagerService } from 'src/app/services/context-manager.service';
 
 @Component({
   selector: 'app-terminal',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TerminalComponent implements OnInit {
 
-  constructor() { }
+  instruction: Instruction = { address: '', nodeId: '-1', operation: Operation.NOP, state: InstructionState.NULL, value: '' };
+  currentIndex: number = -1;
+  constructor(private contextManager: ContextManagerService) { }
 
   ngOnInit(): void {
+    this.contextManager.instructionIndex.subscribe((index) => {
+      this.currentIndex = index;
+    });
+  }
+
+  nextInstruction() {
+    this.instruction = this.contextManager.nextInstruction().instruction;
   }
 
 }

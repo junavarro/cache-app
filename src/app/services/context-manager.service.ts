@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import InitData from '../data/initData';
-import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, Instruction, MainMemoryBlock, MainMemoryParam } from '../models/Models';
+import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, Instruction, InstructionState, MainMemoryBlock, MainMemoryParam, Operation } from '../models/Models';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,8 @@ export class ContextManagerService {
   private queue$: BehaviorSubject<Instruction[]> = new BehaviorSubject<Instruction[]>([]);
   public readonly queue: Observable<Instruction[]> = this.queue$.asObservable();
 
+  private instructionIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
+  public readonly instructionIndex: Observable<number> = this.instructionIndex$.asObservable();
 
   constructor() { }
 
@@ -65,15 +67,26 @@ export class ContextManagerService {
 
 
   addInstruction(instruction: Instruction) {
-    const queue  = this.queue$.getValue();
+    const queue = this.queue$.getValue();
     queue.push(instruction);
     this.queue$.next(queue);
     console.log('adding', instruction);
   }
 
-  nextInstruction(): (Instruction | null) {
-    const queue  = this.queue$.getValue();
-    const instruction = queue.shift();
-    return instruction as (Instruction | null);
+  nextInstruction(): ({ instruction: Instruction, index: number }) {
+    // increment the index if the index < length
+    const queue = this.queue$.getValue();
+    const currentIndex = this.instructionIndex$.getValue() + 1;
+    let instruction: Instruction = { address: '', nodeId: '-1', operation: Operation.NOP, state: InstructionState.NULL, value: '' };
+    if (currentIndex < queue.length) {
+      // access to the array
+      instruction = queue[currentIndex];
+      this.instructionIndex$.next(currentIndex);
+    } else {
+      console.log('No more interviews, return null instruction');
+    }
+    return { instruction, index: currentIndex } as ({ instruction: Instruction, index: number });
   }
+
+
 }
