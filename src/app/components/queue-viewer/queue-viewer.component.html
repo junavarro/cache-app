@@ -1,1 +1,13 @@
-<p>queue-viewer works!</p>
+<div class="queueContainer">
+    <mat-chip-list class="queue" aria-label="queue ">
+        <mat-chip [color]="item.operation ==='CALC'? 'accent':item.operation ==='READ' ? 'warning' : 'primary'  " class="instruction" *ngFor="let item of list " selected>
+            {{item.operation}}
+            <ng-container *ngIf="item.operation === 'READ' || item.operation === 'WRITE'">
+                {{item.address}}
+            </ng-container>
+            <ng-container *ngIf="item.operation === 'WRITE'">
+                {{item.value}}
+            </ng-container>
+        </mat-chip>
+    </mat-chip-list>
+</div>

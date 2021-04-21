@@ -16,7 +16,9 @@ export class ContextManagerService {
   private mainMemory$: BehaviorSubject<{ blocks: MainMemoryBlock[] }> = new BehaviorSubject<{ blocks: MainMemoryBlock[] }>(InitData.MainMemory);
   public readonly mainMemory: Observable<{ blocks: MainMemoryBlock[] }> = this.mainMemory$.asObservable();
 
-  private queue: Instruction[] = [];
+  private queue$: BehaviorSubject<Instruction[]> = new BehaviorSubject<Instruction[]>([]);
+  public readonly queue: Observable<Instruction[]> = this.queue$.asObservable();
+
 
   constructor() { }
 
@@ -63,11 +65,15 @@ export class ContextManagerService {
 
 
   addInstruction(instruction: Instruction) {
-    this.queue.push(instruction)
+    const queue  = this.queue$.getValue();
+    queue.push(instruction);
+    this.queue$.next(queue);
     console.log('adding', instruction);
   }
 
   nextInstruction(): (Instruction | null) {
-    return this.queue.shift() as (Instruction | null);
+    const queue  = this.queue$.getValue();
+    const instruction = queue.shift();
+    return instruction as (Instruction | null);
   }
 }

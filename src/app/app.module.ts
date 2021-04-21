@@ -10,7 +10,7 @@ import { CacheL2Component } from './components/cache-l2/cache-l2.component';
 import { CacheL1FormComponent } from './components/cache-l1-form/cache-l1-form.component';
 import { CacheL2FormComponent } from './components/cache-l2-form/cache-l2-form.component';
 import { RamFormComponent } from './components/ram-form/ram-form.component';
-
+import {MatChipsModule} from '@angular/material/chips'; 
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -23,6 +23,7 @@ import { MatCardModule } from '@angular/material/card';
 import { InstructionEditorComponent } from './components/instruction-editor/instruction-editor.component';
 import { MatDialogModule} from '@angular/material/dialog';
 import { QueueViewerComponent } from './components/queue-viewer/queue-viewer.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +50,8 @@ import { QueueViewerComponent } from './components/queue-viewer/queue-viewer.com
     MatInputModule,
     MatCheckboxModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
+    MatChipsModule
   ],
   exports: [
     NodeComponent,
