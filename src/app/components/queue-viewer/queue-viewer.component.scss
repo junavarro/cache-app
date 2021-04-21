@@ -1,14 +1,17 @@
 div {
-margin: 10px;
-  mat-chip-list.queue {
-    display: flex;
-    flex-direction: row;
-
-    max-width: 700px;
-    overflow-x: scroll;
-    max-height: 40px;
-    mat-chip .instruction {
-      margin-left: 5px;
+  &.queueContainer {
+    width: 100%;
+    mat-chip-list.queue {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: scroll;
+      max-height: 150px;
+      mat-chip .instruction {
+        margin-left: 5px;
+      }
     }
   }
+  margin: 10px;
 }
