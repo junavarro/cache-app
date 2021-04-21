@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import InitData from '../data/initData';
-import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, Instruction, InstructionState, MainMemoryBlock, MainMemoryParam, Operation } from '../models/Models';
+import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, Instruction, InstructionScenario, InstructionState, MainMemoryBlock, MainMemoryParam, Operation } from '../models/Models';
 
 @Injectable({
   providedIn: 'root'
@@ -64,15 +64,12 @@ export class ContextManagerService {
       }
     });
   }
-
-
   addInstruction(instruction: Instruction) {
     const queue = this.queue$.getValue();
     queue.push(instruction);
     this.queue$.next(queue);
     console.log('adding', instruction);
   }
-
   nextInstruction(): ({ instruction: Instruction, index: number }) {
     // increment the index if the index < length
     const queue = this.queue$.getValue();
@@ -88,5 +85,12 @@ export class ContextManagerService {
     return { instruction, index: currentIndex } as ({ instruction: Instruction, index: number });
   }
 
+  getScenario(instruction: Instruction): { instruction: Instruction, scenario: InstructionScenario } {
+    const result :  { instruction: Instruction, scenario: InstructionScenario }= {
+      instruction,
+      scenario: InstructionScenario.NO_SCENARIO
+    }
+    return result;
+  }
 
 }

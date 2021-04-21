@@ -51,6 +51,13 @@ export interface MainMemoryBlock {
 /**
  * CPU 
  */
+export enum InstructionScenario {
+    READ_HIT = 'READ_HIT',
+    READ_MISS = 'READ_MISS',
+    WRITE_HIT = 'WRITE_HIT',
+    WRITE_MISS = 'WRITE_MISS',
+    NO_SCENARIO = 'NO_SCENARIO'
+}
 export enum InstructionState {
     PENDING = 'PENDING',
     EXECUTING = 'EXECUTING',
