@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { MainMemoryComponent } from '../components/main-memory/main-memory.component';
 import InitData from '../data/initData';
-import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, MainMemoryBlock, MainMemoryParam } from '../models/Models';
+import { CacheL1BlockState, CacheL1Params, CacheL2Block, CacheL2BlockState, CacheL2Params, CEContext, ClusterNode, Instruction, MainMemoryBlock, MainMemoryParam } from '../models/Models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +16,12 @@ export class ContextManagerService {
   private mainMemory$: BehaviorSubject<{ blocks: MainMemoryBlock[] }> = new BehaviorSubject<{ blocks: MainMemoryBlock[] }>(InitData.MainMemory);
   public readonly mainMemory: Observable<{ blocks: MainMemoryBlock[] }> = this.mainMemory$.asObservable();
 
+  private queue: Instruction[] = [];
+
   constructor() { }
 
   setCacheL1Block(cacheL1Params: CacheL1Params): Promise<boolean> {
-    return new Promise<boolean>(( resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       const nodes = this.nodes$.getValue();
       const block = nodes.find(node => node.nodeId === cacheL1Params.processorId)?.cacheL1.
         find(block => block.blockId === cacheL1Params.blockId);
@@ -34,7 +35,7 @@ export class ContextManagerService {
     });
   }
   setCacheL2Block(cacheL2Params: CacheL2Params): Promise<boolean> {
-    return new Promise<boolean>(( resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       const cacheL2 = this.cacheL2$.getValue();
       const block = cacheL2.blocks.find(block => block.blockId === cacheL2Params.blockId);
       if (block) {
@@ -49,7 +50,7 @@ export class ContextManagerService {
     });
   }
   setMainMemoryBlock(mainMemoryParam: MainMemoryParam): Promise<boolean> {
-    return new Promise<boolean>(( resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       const mainMemory = this.mainMemory$.getValue();
       const block = mainMemory.blocks.find(block => block.address === mainMemoryParam.address)
       if (block) {
@@ -59,8 +60,14 @@ export class ContextManagerService {
       }
     });
   }
-  
-  enableNode (nodeId:string, enable: boolean ){
 
+
+  addInstruction(instruction: Instruction) {
+    this.queue.push(instruction)
+    console.log('adding', instruction);
+  }
+
+  nextInstruction(): (Instruction | null) {
+    return this.queue.shift() as (Instruction | null);
   }
 }

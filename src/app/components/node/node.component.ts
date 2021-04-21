@@ -1,4 +1,3 @@
-import { createHostListener } from '@angular/compiler/src/core';
 import { Component, Input, OnInit } from '@angular/core';
 import { CacheL1BlockState, ClusterNode, Instruction } from 'src/app/models/Models';
 import { ContextManagerService } from 'src/app/services/context-manager.service';
@@ -72,7 +71,9 @@ export class NodeComponent implements OnInit {
   }
 
   processInstruction() {
-    console.log('processing', this.currentInstruction);
+    if(this.currentInstruction){
+      this.contextManagerService.addInstruction(this.currentInstruction);
+    }
   }
 
   openDialog(): void {

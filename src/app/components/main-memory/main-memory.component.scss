@@ -1,5 +1,9 @@
 div {
   &.memoryContainer {
+    width: 200px;
     margin: 10px;
+    table{
+      width: 100%;
+    }
   }
 }
