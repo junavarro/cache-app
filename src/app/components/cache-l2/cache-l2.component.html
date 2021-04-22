@@ -16,24 +16,63 @@
 
         <ng-container matColumnDef="state">
             <th mat-header-cell *matHeaderCellDef> State </th>
-            <td mat-cell *matCellDef="let element"> {{element.state}} </td>
+            <td mat-cell *matCellDef="let element" [ngClass]="{ 
+                'invalid' : element.state === 'DI', 
+                'shared' : element.state === 'DS',
+                'modified' : element.state === 'DM' }"> {{element.state}} </td>
         </ng-container>
 
         <ng-container matColumnDef="P0">
             <th mat-header-cell *matHeaderCellDef> P0 </th>
-            <td mat-cell *matCellDef="let element"> {{element.P0 }} </td>
+            <td mat-cell *matCellDef="let element" [ngClass]="
+            { 'present' : element.P0, 
+              'notPresent' : !element.P0}">
+                <ng-container *ngIf="element.P0">
+                    ✓
+                </ng-container>
+                <ng-container *ngIf="!element.P0">
+                    ⨯
+                </ng-container>
+            </td>
         </ng-container>
         <ng-container matColumnDef="P1">
             <th mat-header-cell *matHeaderCellDef> P1 </th>
-            <td mat-cell *matCellDef="let element"> {{element.P1}} </td>
+            <td mat-cell *matCellDef="let element" [ngClass]="
+            { 'present' : element.P1, 
+              'notPresent' : !element.P1}">
+                <ng-container *ngIf="element.P1">
+                    ✓
+                </ng-container>
+                <ng-container *ngIf="!element.P1">
+                    ⨯
+                </ng-container>
+            </td>
         </ng-container>
         <ng-container matColumnDef="P2">
             <th mat-header-cell *matHeaderCellDef> P2 </th>
-            <td mat-cell *matCellDef="let element"> {{element.P2}} </td>
+            <td mat-cell *matCellDef="let element" [ngClass]="
+            { 'present' : element.P2, 
+              'notPresent' : !element.P2}">
+                <ng-container *ngIf="element.P2">
+                    ✓
+                </ng-container>
+                <ng-container *ngIf="!element.P2">
+                    ⨯
+                </ng-container>
+            </td>
         </ng-container>
         <ng-container matColumnDef="P3">
             <th mat-header-cell *matHeaderCellDef> P3 </th>
-            <td mat-cell *matCellDef="let element"> {{element.P3}} </td>
+            <td mat-cell *matCellDef="let element" [ngClass]="
+            { 'present' : element.P3, 
+              'notPresent' : !element.P3}">
+                <ng-container *ngIf="element.P3">
+                    ✓
+                </ng-container>
+                <ng-container *ngIf="!element.P3">
+                    ⨯
+                </ng-container>
+            </td>
         </ng-container>
 
 

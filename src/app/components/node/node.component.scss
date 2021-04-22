@@ -1,4 +1,4 @@
-div.spinner{
+div.spinner {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,7 @@ div {
     width: 100%;
     justify-content: space-around;
     color: white;
-    h2{
+    h2 {
       margin-bottom: 2px;
     }
     div {
@@ -34,4 +34,26 @@ div {
 }
 table {
   width: 230px;
+}
+
+td {
+  &.invalid {
+    font-size: 1.5em;
+    font-weight: bolder;
+    color: #F44336;
+  }
+  &.shared {
+    font-size: 1.5em;
+
+    font-weight: bolder;
+
+    color: #FFD740;
+  }
+  &.modified {
+    font-size: 1.5em;
+
+    font-weight: bolder;
+
+    color: #00BCD4;
+  }
 }
