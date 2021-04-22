@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Operation } from 'src/app/models/Models';
+import { InstructionScenario, InstructionState, Operation } from 'src/app/models/Models';
 import { ContextManagerService } from 'src/app/services/context-manager.service';
 
 @Component({
@@ -78,7 +78,8 @@ export class InstructionEditorComponent implements OnInit {
       nodeId: this.nodeId,
       address: this.addressSelected,
       operation: this.operationSelected,
-      value: this.dataInput
+      value: this.dataInput,
+      state: InstructionState.PENDING
     });
   }
 

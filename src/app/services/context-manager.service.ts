@@ -64,9 +64,11 @@ export class ContextManagerService {
       }
     });
   }
+
   addInstruction(instruction: Instruction) {
     const queue = this.queue$.getValue();
     queue.push(instruction);
+    console.log(queue);
     this.queue$.next(queue);
     console.log('adding', instruction);
   }
@@ -86,11 +88,69 @@ export class ContextManagerService {
   }
 
   getScenario(instruction: Instruction): { instruction: Instruction, scenario: InstructionScenario } {
-    const result :  { instruction: Instruction, scenario: InstructionScenario }= {
+    const cpu = this.nodes$.getValue().find(node => node.nodeId === instruction.nodeId);
+    const targetBlock = Number(instruction.address) % 2;
+    const cacheLine = cpu?.cacheL1[targetBlock];
+
+    const result: { instruction: Instruction, scenario: InstructionScenario } = {
       instruction,
       scenario: InstructionScenario.NO_SCENARIO
+    }
+    if (instruction.operation === Operation.CALC) {
+      result.scenario = InstructionScenario.NO_WAIT;
+    }
+    else if (instruction.operation === Operation.READ) {
+      // compare address       // compare state
+      if (instruction.address === cacheLine?.address && cacheLine.state !== CacheL1BlockState.INVALID) {
+        result.scenario = InstructionScenario.READ_HIT;
+
+      } else {
+        result.scenario = InstructionScenario.READ_MISS;
+      }
+    }
+    else if (instruction.operation === Operation.WRITE) {
+      if (instruction.address === cacheLine?.address && cacheLine.state !== CacheL1BlockState.INVALID) {
+        result.scenario = InstructionScenario.WRITE_HIT;
+      } else {
+        result.scenario = InstructionScenario.WRITE_MISS;
+      }
     }
     return result;
   }
 
+  setInstructionState(index: number, state: InstructionState) {
+    // get the queue
+    let queue = this.queue$.getValue();
+    // update the instruction
+    for (let i = 0; i < queue.length; i++) {
+      if (index === i) {
+        queue[index].state = state;
+        break;
+      }
+    }
+    this.queue$.next(queue);
+  }
+
+  handleCalc(index: number, instruction: Instruction) { 
+    this.setInstructionState(index, InstructionState.DONE);
+    const event = new CustomEvent<any>('nextInstruction', {
+      detail: {
+        nodeId: instruction.nodeId
+      }
+    });
+    document.dispatchEvent(event);
+  }
+
+  handleReadHit(index: number, instruction: Instruction) {
+
+  }
+  handleReadMiss(index: number, instruction: Instruction) {
+
+  }
+  handleWriteHit(index: number, instruction: Instruction) {
+
+  }
+  handleWriteMiss(index: number, instruction: Instruction) {
+
+  }
 }

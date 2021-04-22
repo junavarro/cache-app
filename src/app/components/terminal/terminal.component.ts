@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Instruction, InstructionState, Operation } from 'src/app/models/Models';
+import { Instruction, InstructionScenario, InstructionState, Operation } from 'src/app/models/Models';
 import { ContextManagerService } from 'src/app/services/context-manager.service';
 
 @Component({
@@ -9,8 +9,8 @@ import { ContextManagerService } from 'src/app/services/context-manager.service'
 })
 export class TerminalComponent implements OnInit {
 
-  instruction: Instruction = { address: '', nodeId: '-1', operation: Operation.NOP, state: InstructionState.NULL, value: '' };
   currentIndex: number = -1;
+  scenario: { instruction: Instruction, scenario: InstructionScenario } | null = null;
   constructor(private contextManager: ContextManagerService) { }
 
   ngOnInit(): void {
@@ -20,7 +20,24 @@ export class TerminalComponent implements OnInit {
   }
 
   nextInstruction() {
-    this.instruction = this.contextManager.nextInstruction().instruction;
+    const instruction = this.contextManager.nextInstruction().instruction;
+    this.scenario = this.contextManager.getScenario(instruction);
+    if (this.scenario.scenario === InstructionScenario.NO_WAIT) {
+      this.contextManager.handleCalc(this.currentIndex, instruction);
+    }
+    else if (this.scenario.scenario === InstructionScenario.READ_HIT) {
+      this.contextManager.handleReadHit(this.currentIndex, instruction);
+    }
+    else if (this.scenario.scenario === InstructionScenario.READ_MISS) {
+      this.contextManager.handleReadMiss(this.currentIndex, instruction);
+    }
+    else if (this.scenario.scenario === InstructionScenario.WRITE_HIT) {
+      this.contextManager.handleWriteHit(this.currentIndex, instruction);
+    }
+    else if (this.scenario.scenario === InstructionScenario.WRITE_MISS) {
+      this.contextManager.handleWriteMiss(this.currentIndex, instruction);
+    }
+    console.log(this.scenario);
   }
 
 }

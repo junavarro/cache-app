@@ -56,6 +56,7 @@ export enum InstructionScenario {
     READ_MISS = 'READ_MISS',
     WRITE_HIT = 'WRITE_HIT',
     WRITE_MISS = 'WRITE_MISS',
+    NO_WAIT = 'NO_WAIT',
     NO_SCENARIO = 'NO_SCENARIO'
 }
 export enum InstructionState {
