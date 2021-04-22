@@ -33,6 +33,7 @@ export class NodeComponent implements OnInit {
   displayedColumns: string[] = ['blockId', 'state', 'address', 'data'];
   instructorGenerator: InstructionGenerator = new InstructionGenerator(Number(this.nodeId));
   currentInstruction: Instruction | null = null;
+  pseudoLoading: boolean = false;
   constructor(private contextManagerService: ContextManagerService, public dialog: MatDialog) {
 
   }
@@ -60,7 +61,11 @@ export class NodeComponent implements OnInit {
       const { nodeId } = (eventData as CustomEvent).detail;
       if (nodeId === this.clusterNode.nodeId) {
         //console.log((eventData as CustomEvent).detail);
+        this.pseudoLoading = true;
         this.fetch();
+        setTimeout(() => {
+          this.pseudoLoading = false;
+        }, 1000);
       }
     });
   }

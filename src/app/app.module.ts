@@ -24,7 +24,7 @@ import { InstructionEditorComponent } from './components/instruction-editor/inst
 import { MatDialogModule } from '@angular/material/dialog';
 import { QueueViewerComponent } from './components/queue-viewer/queue-viewer.component';
 import { TerminalComponent } from './components/terminal/terminal.component';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +53,8 @@ import { TerminalComponent } from './components/terminal/terminal.component';
     MatCheckboxModule,
     MatCardModule,
     MatDialogModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     NodeComponent,

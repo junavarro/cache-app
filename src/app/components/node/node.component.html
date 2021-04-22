@@ -35,6 +35,11 @@
     </div>
     <div class="nodeDescription">
         <h2> CPU {{nodeId}} </h2>
+        <ng-container *ngIf="pseudoLoading">
+            <div class="spinner">
+                <mat-spinner diameter="50" class="spinner"></mat-spinner>
+            </div>
+        </ng-container>
         <div class="description">
 
             <ng-container *ngIf="currentInstruction?.operation === 'CALC'">

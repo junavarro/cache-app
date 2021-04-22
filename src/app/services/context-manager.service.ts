@@ -131,26 +131,33 @@ export class ContextManagerService {
     this.queue$.next(queue);
   }
 
-  handleCalc(index: number, instruction: Instruction) { 
+  handleCalc(index: number, instruction: Instruction) {
     this.setInstructionState(index, InstructionState.DONE);
+    this.dispatchNextEvent(instruction.nodeId);
+  }
+
+  handleReadHit(index: number, instruction: Instruction) {
+    this.setInstructionState(index, InstructionState.DONE);
+    this.dispatchNextEvent(instruction.nodeId);
+  }
+  handleReadMiss(index: number, instruction: Instruction) {
+    // this.dispatchNextEvent(instruction.nodeId);
+  }
+  handleWriteHit(index: number, instruction: Instruction) {
+    //this.dispatchNextEvent(instruction.nodeId);
+  }
+  handleWriteMiss(index: number, instruction: Instruction) {
+    //this.dispatchNextEvent(instruction.nodeId);
+  }
+
+  dispatchNextEvent(nodeId: string) {
     const event = new CustomEvent<any>('nextInstruction', {
       detail: {
-        nodeId: instruction.nodeId
+        nodeId
       }
     });
     document.dispatchEvent(event);
   }
 
-  handleReadHit(index: number, instruction: Instruction) {
 
-  }
-  handleReadMiss(index: number, instruction: Instruction) {
-
-  }
-  handleWriteHit(index: number, instruction: Instruction) {
-
-  }
-  handleWriteMiss(index: number, instruction: Instruction) {
-
-  }
 }

@@ -1,3 +1,8 @@
+div.spinner{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 div.CPUContainer {
   padding: 5px;
   border: solid 2px darkgoldenrod;
@@ -14,6 +19,9 @@ div {
     width: 100%;
     justify-content: space-around;
     color: white;
+    h2{
+      margin-bottom: 2px;
+    }
     div {
       &.tools {
         width: 100%;
