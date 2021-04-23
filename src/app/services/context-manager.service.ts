@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import InitData from '../data/initData';
@@ -40,7 +41,7 @@ export class ContextManagerService {
   }
   setCacheL2Block(cacheL2Params: CacheL2Params): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const cacheL2 = this.cacheL2$.getValue();
+      const cacheL2 = Object.assign({}, this.cacheL2$.getValue());
       const block = cacheL2.blocks.find(block => block.blockId === cacheL2Params.blockId);
       if (block) {
         block.address = cacheL2Params.address;
@@ -49,7 +50,7 @@ export class ContextManagerService {
         block.state = cacheL2Params.state as CacheL2BlockState;
       }
       this.cacheL2$.next(cacheL2);
-      resolve(true);
+
 
     });
   }
@@ -141,13 +142,139 @@ export class ContextManagerService {
     this.dispatchNextEvent(instruction.nodeId);
   }
   handleReadMiss(index: number, instruction: Instruction) {
-    // this.dispatchNextEvent(instruction.nodeId);
+    const cacheL2block = this.getCacheL2Block(instruction.address);
+
+    if (cacheL2block) {// in the directory
+      const dataFromCacheL2 = cacheL2block.data;
+      if (cacheL2block.state === CacheL2BlockState.DIRECTORY_SHARED) {
+        cacheL2block.list[Number(instruction.nodeId)] = true;
+        this.setCacheL2Block(cacheL2block);
+        this.setCacheL1Propagation({...instruction,value:dataFromCacheL2});
+      }
+      else if (cacheL2block.state === CacheL2BlockState.DIRECTORY_MODIFIED) {
+        // search cache l1 owner  and set its cache l1 block in shared
+        for (let presenceIndex = 0; presenceIndex < cacheL2block.list.length; presenceIndex++) {
+          const presenceNode = cacheL2block.list[presenceIndex];
+          if (presenceNode) {
+            const block = this.nodes$.getValue()[presenceIndex].cacheL1[Number(instruction.address)];
+            block.state = CacheL1BlockState.SHARED;
+            this.setCacheL1Block({ ...block, processorId: `${presenceIndex}` });
+            break;
+          }
+        }
+        // set cache l2 block to share
+        cacheL2block.state = CacheL2BlockState.DIRECTORY_SHARED;
+        // update presence list
+        cacheL2block.list[Number(instruction.nodeId)] = true;
+        this.setCacheL2Block(cacheL2block);
+        // update cache l1 target no propagation
+        this.setCacheL1Propagation({...instruction,value:dataFromCacheL2});
+      }
+      else if (cacheL2block.state === CacheL2BlockState.DIRECTORY_INVALID) {
+        cacheL2block.state = CacheL2BlockState.DIRECTORY_SHARED;
+        cacheL2block.list = [false, false, false, false];
+        cacheL2block.list[Number(instruction.nodeId)] = true;
+        this.setCacheL1Block({
+          address: instruction.address,
+          blockId: `${Number(instruction.address) % 2}`,
+          data: dataFromCacheL2,
+          state: CacheL1BlockState.SHARED,
+          processorId: instruction.nodeId
+        });
+      }
+    } else { // not present in the directory
+
+      //get data from ram
+      const ram = this.mainMemory$.getValue();
+
+      const dataFromRam = ram.blocks[Number(instruction.address)];
+      const cacheL2 = this.cacheL2$.getValue();
+      // get the set using modulus
+      const targetSet = Number(instruction.address) % 2;
+      // cal random to write on set
+      const randomBlockIndex = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+
+      //get the current data on the random block 
+      const cacheL2Block = cacheL2.blocks[2 * targetSet + randomBlockIndex];
+      // state is invalid
+      if (cacheL2Block.state === CacheL2BlockState.DIRECTORY_INVALID) {
+        const presenceList = [false, false, false, false];
+        presenceList[Number(instruction.nodeId)] = true;
+        this.setCacheL2Block({
+          address: instruction.address,
+          blockId: instruction.nodeId,
+          data: dataFromRam.data,
+          list: presenceList,
+          state: CacheL2BlockState.DIRECTORY_SHARED
+        })
+      }
+      // state is shared
+      else if (cacheL2Block.state === CacheL2BlockState.DIRECTORY_SHARED) {
+        for (let i = 0; i < cacheL2Block.list.length; i++) {
+          if (cacheL2Block.list[i]) {
+            const currentCacheL1block = this.nodes$.getValue()[i].cacheL1[Number(instruction.address) % 2];
+            currentCacheL1block.state = CacheL1BlockState.INVALID;
+            this.setCacheL1Block({
+              ...currentCacheL1block,
+              processorId: instruction.nodeId
+            })
+          }
+        }
+        const presenceList = [false, false, false, false];
+        presenceList[Number(instruction.nodeId)] = true;
+        this.setCacheL2Block({
+          address: instruction.address,
+          blockId: instruction.nodeId,
+          data: dataFromRam.data,
+          list: presenceList,
+          state: CacheL2BlockState.DIRECTORY_SHARED
+        })
+
+
+      }
+      // state is modified
+      else if (cacheL2Block.state === CacheL2BlockState.DIRECTORY_MODIFIED) {
+        const ram = this.mainMemory$.getValue();
+        const block = ram.blocks[Number(instruction.address)];
+        block.data = cacheL2Block.data;
+        this.setMainMemoryBlock(block);
+        const cacheL2 = this.cacheL2$.getValue();
+        for (let index = 0; index < cacheL2.blocks.length; index++) {
+          const block = cacheL2.blocks[index];
+          if (block.address === instruction.address) {
+            for (let presenceIndex = 0; presenceIndex < block.list.length; presenceIndex++) {
+              const presence = block.list[presenceIndex];
+              if (presenceIndex) {
+                this.setCacheL1Block({
+                  address: instruction.address,
+                  blockId: instruction.nodeId,
+                  data: dataFromRam.data,
+                  processorId: instruction.nodeId,
+                  state: CacheL1BlockState.INVALID
+                })
+              }
+
+            }
+          }
+
+        }
+      }
+      this.setCacheL1Propagation({ ...instruction, value: dataFromRam.data });
+      this.setInstructionState(index, InstructionState.DONE);
+      this.dispatchNextEvent(instruction.nodeId);
+    }
+
+
+    this.setInstructionState(index, InstructionState.DONE);
+    this.dispatchNextEvent(instruction.nodeId);
   }
   handleWriteHit(index: number, instruction: Instruction) {
-    //this.dispatchNextEvent(instruction.nodeId);
+    this.setInstructionState(index, InstructionState.DONE);
+    this.dispatchNextEvent(instruction.nodeId);
   }
   handleWriteMiss(index: number, instruction: Instruction) {
-    //this.dispatchNextEvent(instruction.nodeId);
+    this.setInstructionState(index, InstructionState.DONE);
+    this.dispatchNextEvent(instruction.nodeId);
   }
 
   dispatchNextEvent(nodeId: string) {
@@ -159,5 +286,71 @@ export class ContextManagerService {
     document.dispatchEvent(event);
   }
 
+  private setCacheL1Propagation(instruction: Instruction) {
+    // get the actual block
+    const node = this.nodes$.getValue()[Number(instruction.nodeId)];
+    const currentCacheL1Block = node.cacheL1[Number(instruction.address) % 2];
+    if (currentCacheL1Block.state === CacheL1BlockState.INVALID) {
+      this.setCacheL1Block({
+        blockId: currentCacheL1Block.blockId,
+        state: CacheL1BlockState.SHARED,
+        data: instruction.value,
+        address: instruction.address,
+        processorId: instruction.nodeId
+      });
+    } else if (currentCacheL1Block.state === CacheL1BlockState.MODIFIED) {
+      const ram = this.mainMemory$.getValue();
+      ram.blocks[Number(instruction.address)].data = currentCacheL1Block.data;
+      this.setCacheL1Block({
+        blockId: currentCacheL1Block.blockId,
+        state: CacheL1BlockState.SHARED,
+        data: instruction.value,
+        address: instruction.address,
+        processorId: instruction.nodeId
+      });
+      const cacheL2 = this.cacheL2$.getValue();
+      for (let block = 0; block < cacheL2.blocks.length; block++) {
+        const cacheBlock = cacheL2.blocks[block];
+        if (cacheBlock.address === instruction.address) {
+          cacheBlock.state = CacheL2BlockState.DIRECTORY_INVALID;
+          this.setCacheL2Block({ ...cacheBlock });
+          break;
+        }
+      }
+    } else if (currentCacheL1Block.state === CacheL1BlockState.SHARED) {
+      // set to false presence of bit
+      const cacheL2 = this.cacheL2$.getValue();
+      for (let block = 0; block < cacheL2.blocks.length; block++) {
+        const cacheBlock = cacheL2.blocks[block];
+        if (cacheBlock.address === instruction.address) {
+          cacheBlock.list[Number(instruction.nodeId)] = false;
+          cacheBlock.state = CacheL2BlockState.DIRECTORY_SHARED;
+          this.setCacheL2Block({ ...cacheBlock });
+          break;
+        }
+      }
+      this.setCacheL1Block({
+        blockId: currentCacheL1Block.blockId,
+        state: CacheL1BlockState.SHARED,
+        data: instruction.value,
+        address: instruction.address,
+        processorId: instruction.nodeId
+      });
+    }
+
+  }
+
+  private getCacheL2Block(address: string): CacheL2Block | null {
+    let result = null;
+    const cacheL2 = this.cacheL2$.getValue();
+    for (let blockIndex = 0; blockIndex < cacheL2.blocks.length; blockIndex++) {
+      const block = cacheL2.blocks[blockIndex];
+      if (block.address === address) {
+        result = block;
+        break;
+      }
+    }
+    return result;
+  }
 
 }

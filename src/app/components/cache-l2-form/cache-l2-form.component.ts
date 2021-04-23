@@ -61,13 +61,13 @@ export class CacheL2FormComponent implements OnInit {
   }
 
   setBlock() {
-    const block: CacheL2Params = {
+    const block: CacheL2Params = Object.assign({}, {
       address: this.addressSelected,
       blockId: this.blockSelected,
       data: this.dataInput,
       state: this.stateSelected,
-      list: this.presenceList
-    };
+      list: this.presenceList.slice()
+    });
     this.contextManager.setCacheL2Block(block);
   }
 
