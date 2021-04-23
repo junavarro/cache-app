@@ -324,6 +324,7 @@ export class ContextManagerService {
         break;
       }
     }
+    this.setCacheL1Propagation(instruction);
     if (!cacheL2BlockFound) {
       const targetSet = Number(instruction.address) % 2;
       const randomBlockL2 = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
@@ -336,7 +337,6 @@ export class ContextManagerService {
       this.setCacheL2Block(block);
     }
 
-    this.setCacheL1Propagation(instruction);
     this.setInstructionState(index, InstructionState.DONE);
     this.dispatchNextEvent(instruction.nodeId);
   }

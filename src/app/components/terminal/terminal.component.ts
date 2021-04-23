@@ -53,10 +53,11 @@ export class TerminalComponent implements OnInit {
           if (this.currentIndex < 0) {
             clearInterval(this.interval);
           }
-        }, 1500
+        }, 500
       )
       this.running = true;
     } else {
+      this.running = false;
       clearInterval(this.interval);
     }
   }
