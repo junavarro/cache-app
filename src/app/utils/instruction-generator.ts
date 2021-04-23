@@ -26,7 +26,7 @@ export class InstructionGenerator {
      */
     generateInstruction(processorId: string) {
         this.seed = Date.now()*(Number(processorId)+1);
-        const pseudo_uniform_aux = (mult: number, mod: number, seed: number, size: number) => {
+        const binomial_aux = (mult: number, mod: number, seed: number, size: number) => {
             const U = Array(size).fill(0);
             let x = (seed * mult + 1) % mod;
             U[0] = x / mod;
@@ -36,11 +36,11 @@ export class InstructionGenerator {
             }
             return U[size - 1];
         }
-        const pseudo_uniform = (low: number, high: number) => {
-            return Math.floor(low + (high - low) * pseudo_uniform_aux(16807, (2 ** 31) - 1, this.seed, 10));
+        const binomial = (low: number, high: number) => {
+            return Math.floor(low + (high - low) * binomial_aux(16807, (2 ** 31) - 1, this.seed, 10));
         }
         const instructionTypes = [Operation.CALC, Operation.READ, Operation.WRITE];
-        const randomValueForInstruction = pseudo_uniform(0, 3);
+        const randomValueForInstruction = binomial(0, 3);
         const resultInstruction = instructionTypes[randomValueForInstruction];
         const instruction : Instruction = {
             nodeId: processorId,
@@ -53,11 +53,11 @@ export class InstructionGenerator {
             case Operation.CALC:
                 break;
             case Operation.WRITE:
-                instruction.value = `0x${pseudo_uniform(0, 2 ** 8 - 1)}`;
-                instruction.address = `0x${pseudo_uniform(0, 7)}`;
+                instruction.value = `0x${binomial(0, 2 ** 4 - 1)}`;
+                instruction.address = `0x${binomial(0, 7)}`;
                 break;
             case Operation.READ:
-                instruction.address = `0x${pseudo_uniform(0, 7)}`;
+                instruction.address = `0x${binomial(0, 7)}`;
                 break;
             default:
                 break;
