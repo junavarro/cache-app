@@ -25,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { QueueViewerComponent } from './components/queue-viewer/queue-viewer.component';
 import { TerminalComponent } from './components/terminal/terminal.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatBadgeModule } from '@angular/material/badge';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,7 +55,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule,
     MatDialogModule,
     MatChipsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatBadgeModule
   ],
   exports: [
     NodeComponent,

@@ -1,7 +1,7 @@
 <div class="queueContainer">
     <h2> Queue Instructions container</h2>
     <mat-chip-list class="queue" aria-label="queue ">
-        <mat-chip [color]="item.operation ==='CALC'? 'accent':item.operation ==='READ' ? 'warning' : 'primary'  " class="instruction" *ngFor="let item of list " selected>
+        <mat-chip  [matBadge]="item.nodeId" matBadgePosition="after" matBadgeColor="accent" matBa [color]="item.operation ==='CALC'? 'accent':item.operation ==='READ' ? 'warning' : 'primary'  " class="instruction" *ngFor="let item of list " selected>
             {{item.operation}}
             <ng-container *ngIf="item.operation === 'READ' || item.operation === 'WRITE'">
                 {{item.address}}

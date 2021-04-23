@@ -8,12 +8,13 @@ div {
     }
     width: 98%;
     mat-chip-list.queue {
+      margin-top: 10px;
       display: flex;
       flex-direction: row;
       width: 100%;
       max-width: 100%;
       overflow-x: scroll;
-      max-height: 150px;
+      height: 80px;
       mat-chip .instruction {
         margin-left: 5px;
       }
