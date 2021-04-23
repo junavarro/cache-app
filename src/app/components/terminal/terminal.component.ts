@@ -41,14 +41,14 @@ export class TerminalComponent implements OnInit {
       this.contextManager.handleWriteMiss(this.currentIndex, instruction);
     }
 
-    console.log(this.scenario);
+    //console.log(this.scenario);
   }
 
   continue() {
     if (!this.running) {
       this.interval = setInterval(
         () => {
-          console.log('Running');
+          //console.log('Running');
           this.nextInstruction();
           if (this.currentIndex < 0) {
             clearInterval(this.interval);
