@@ -11,6 +11,9 @@ export class TerminalComponent implements OnInit {
 
   currentIndex: number = -1;
   scenario: { instruction: Instruction, scenario: InstructionScenario } | null = null;
+  interval: any = null;
+  running: boolean = false;
+
   constructor(private contextManager: ContextManagerService) { }
 
   ngOnInit(): void {
@@ -37,7 +40,25 @@ export class TerminalComponent implements OnInit {
     else if (this.scenario.scenario === InstructionScenario.WRITE_MISS) {
       this.contextManager.handleWriteMiss(this.currentIndex, instruction);
     }
+
     console.log(this.scenario);
+  }
+
+  continue() {
+    if (!this.running) {
+      this.interval = setInterval(
+        () => {
+          console.log('Running');
+          this.nextInstruction();
+          if (this.currentIndex < 0) {
+            clearInterval(this.interval);
+          }
+        }, 1500
+      )
+      this.running = true;
+    } else {
+      clearInterval(this.interval);
+    }
   }
 
 }

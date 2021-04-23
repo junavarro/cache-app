@@ -7,6 +7,13 @@
     </div>
     <div class="buttons">
         <button mat-button color="warn" (click)="nextInstruction()">Next instruction</button>
-        <button mat-button disabled>Continue</button>
+        <button mat-button color="accent" (click)="continue()">
+            <ng-container *ngIf="!running">
+                Continue
+            </ng-container>
+            <ng-container *ngIf="running">
+                Pause
+            </ng-container>
+        </button>
     </div>
 </div>
