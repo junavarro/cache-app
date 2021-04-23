@@ -143,7 +143,7 @@ export class ContextManagerService {
   }
   handleReadMiss(index: number, instruction: Instruction) {
     const cacheL2block = this.getCacheL2Block(instruction.address);
-    console.log('handleReadMiss', cacheL2block);
+    // console.log('handleReadMiss', cacheL2block);
     if (cacheL2block) {// in the directory
       const dataFromCacheL2 = cacheL2block.data;
       if (cacheL2block.state === CacheL2BlockState.DIRECTORY_SHARED) {
@@ -308,6 +308,34 @@ export class ContextManagerService {
     this.dispatchNextEvent(instruction.nodeId);
   }
   handleWriteMiss(index: number, instruction: Instruction) {
+    const cacheL2 = this.cacheL2$.getValue();
+    let cacheL2BlockFound = false;
+    //search for cache L2 address
+    for (let blockIndex = 0; blockIndex < cacheL2.blocks.length; blockIndex++) {
+      const blockL2 = cacheL2.blocks[blockIndex];
+      if (blockL2.address === instruction.address) {
+        blockL2.list = [false, false, false, false];
+        blockL2.list[Number(instruction.nodeId)] = true;
+        blockL2.data = instruction.value;
+        blockL2.address = instruction.address;
+        blockL2.state = CacheL2BlockState.DIRECTORY_MODIFIED;
+        this.setCacheL2Block(blockL2);
+        cacheL2BlockFound = true;
+        break;
+      }
+    }
+    if (!cacheL2BlockFound) {
+      const targetSet = Number(instruction.address) % 2;
+      const randomBlockL2 = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+      const block = this.cacheL2$.getValue().blocks[2 * targetSet + randomBlockL2];
+      block.address = instruction.address;
+      block.data = instruction.value;
+      block.list = [false, false, false, false];
+      block.state = CacheL2BlockState.DIRECTORY_MODIFIED;
+      block.list[Number(instruction.nodeId)] = true;
+      this.setCacheL2Block(block);
+    }
+
     this.setCacheL1Propagation(instruction);
     this.setInstructionState(index, InstructionState.DONE);
     this.dispatchNextEvent(instruction.nodeId);
@@ -329,7 +357,7 @@ export class ContextManagerService {
     if (currentCacheL1Block.state === CacheL1BlockState.INVALID) {
       this.setCacheL1Block({
         blockId: currentCacheL1Block.blockId,
-        state: CacheL1BlockState.SHARED,
+        state: CacheL1BlockState.MODIFIED,
         data: instruction.value,
         address: instruction.address,
         processorId: instruction.nodeId
@@ -339,7 +367,7 @@ export class ContextManagerService {
       ram.blocks[Number(instruction.address)].data = currentCacheL1Block.data;
       this.setCacheL1Block({
         blockId: currentCacheL1Block.blockId,
-        state: CacheL1BlockState.SHARED,
+        state: CacheL1BlockState.MODIFIED,
         data: instruction.value,
         address: instruction.address,
         processorId: instruction.nodeId
@@ -363,7 +391,7 @@ export class ContextManagerService {
           const reducer = (accumulator: boolean, current: boolean) => accumulator && current;
           if (!cacheBlock.list.reduce(reducer)) {
             cacheBlock.state = CacheL2BlockState.DIRECTORY_INVALID;
-            cacheBlock.address = '0x0'; 
+            cacheBlock.address = '0x0';
           }
           this.setCacheL2Block({ ...cacheBlock });
           break;
