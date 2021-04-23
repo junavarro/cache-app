@@ -149,7 +149,7 @@ export class ContextManagerService {
       if (cacheL2block.state === CacheL2BlockState.DIRECTORY_SHARED) {
         cacheL2block.list[Number(instruction.nodeId)] = true;
         this.setCacheL2Block(cacheL2block);
-        this.setCacheL1Propagation({...instruction,value:dataFromCacheL2});
+        this.setCacheL1Propagation({ ...instruction, value: dataFromCacheL2 });
       }
       else if (cacheL2block.state === CacheL2BlockState.DIRECTORY_MODIFIED) {
         // search cache l1 owner  and set its cache l1 block in shared
@@ -168,7 +168,7 @@ export class ContextManagerService {
         cacheL2block.list[Number(instruction.nodeId)] = true;
         this.setCacheL2Block(cacheL2block);
         // update cache l1 target no propagation
-        this.setCacheL1Propagation({...instruction,value:dataFromCacheL2});
+        this.setCacheL1Propagation({ ...instruction, value: dataFromCacheL2 });
       }
       else if (cacheL2block.state === CacheL2BlockState.DIRECTORY_INVALID) {
         cacheL2block.state = CacheL2BlockState.DIRECTORY_SHARED;
@@ -269,10 +269,45 @@ export class ContextManagerService {
     this.dispatchNextEvent(instruction.nodeId);
   }
   handleWriteHit(index: number, instruction: Instruction) {
+    const nodes = this.nodes$.getValue();
+    const cacheL1Block = this.nodes$.getValue()[Number(instruction.nodeId)].cacheL1[Number(instruction.address) % 2];
+    if (cacheL1Block.state === CacheL1BlockState.MODIFIED) {
+      this.setCacheL1Block({
+        ...cacheL1Block,
+        data: instruction.value,
+        processorId: instruction.nodeId,
+        state: CacheL1BlockState.MODIFIED
+      })
+    } else if (cacheL1Block.state === CacheL1BlockState.SHARED) {
+      const cacheL2Block = this.getCacheL2Block(instruction.address);
+      if (cacheL2Block) {
+        cacheL2Block.state = CacheL2BlockState.DIRECTORY_MODIFIED;
+        for (let nodeId = 0; nodeId < cacheL2Block.list.length; nodeId++) {
+          if (cacheL2Block.list[nodeId]) {
+            const cacheL1Block = nodes[nodeId].cacheL1[Number(instruction) % 2];
+            if (cacheL1Block.address === instruction.address) {
+              cacheL1Block.state = CacheL1BlockState.INVALID;
+              this.setCacheL1Block({ ...cacheL1Block, processorId: instruction.nodeId });
+            }
+
+          }
+        }
+        cacheL2Block.list = [false, false, false, false];
+        cacheL2Block.list[Number(instruction.nodeId)] = true;
+        this.setCacheL1Block({
+          ...cacheL1Block,
+          processorId: instruction.nodeId,
+          address: instruction.address,
+          data: instruction.value,
+          state: CacheL1BlockState.MODIFIED
+        });
+      }
+    }
     this.setInstructionState(index, InstructionState.DONE);
     this.dispatchNextEvent(instruction.nodeId);
   }
   handleWriteMiss(index: number, instruction: Instruction) {
+    this.setCacheL1Propagation(instruction);
     this.setInstructionState(index, InstructionState.DONE);
     this.dispatchNextEvent(instruction.nodeId);
   }
